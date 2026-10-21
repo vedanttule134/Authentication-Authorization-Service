@@ -218,7 +218,7 @@ curl --location 'http://localhost:8080/api/user/create' \
 
 ## Author
 
-**YOUR NAME**
-[LinkedIn](https://linkedin.com/in/YOUR_PROFILE) · [GitHub](https://github.com/YOUR_USERNAME) · your.email@example.com
+**VEDANT TULE**
+[LinkedIn](https://www.linkedin.com/in/vedant-tule-software-engineer/) · [GitHub](https://github.com/vedanttule134) · vedanttule134@gmail.com
 
 If this project helped you, consider giving it a star.
