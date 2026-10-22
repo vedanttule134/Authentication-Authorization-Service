@@ -2,6 +2,7 @@ package com.security.SpringSecurityApplication.controllers;
 
 import ch.qos.logback.core.net.SyslogOutputStream;
 import com.security.SpringSecurityApplication.requestDTO.LoginRequest;
+import com.security.SpringSecurityApplication.services.JwtService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,9 +20,11 @@ import java.util.Map;
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
 
-    public AuthController(AuthenticationManager authenticationManager) {
+    public AuthController(AuthenticationManager authenticationManager, JwtService jwtService) {
         this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
     }
 
     @PostMapping("/login")
@@ -31,6 +34,10 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
 //        System.out.println("auth ->" + auth);
-        return ResponseEntity.ok(Map.of("message", "Login Successful", "username", auth.getName()));
+        String jwtToken = jwtService.generateToken(request);
+
+        return ResponseEntity.ok(Map.of("message", "Login Successful",
+                "username", auth.getName(),
+                "token", jwtToken));
     }
 }

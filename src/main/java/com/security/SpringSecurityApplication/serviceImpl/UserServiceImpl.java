@@ -4,10 +4,13 @@ import com.security.SpringSecurityApplication.entities.Users;
 import com.security.SpringSecurityApplication.repositories.UserRepository;
 import com.security.SpringSecurityApplication.requestDTO.CreateUserRequest;
 import com.security.SpringSecurityApplication.responseDTO.CreateUserResponse;
+import com.security.SpringSecurityApplication.responseDTO.GetAllUsersResponse;
 import com.security.SpringSecurityApplication.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -38,5 +41,13 @@ public class UserServiceImpl implements UserService {
         Users saved = userRepo.save(user);
 
         return modelMapper.map(saved, CreateUserResponse.class);
+    }
+
+    @Override
+    public List<GetAllUsersResponse> getAllUsers() {
+        List<Users> list = userRepo.findAll();
+        return list.stream()
+                .map(n -> modelMapper.map(n, GetAllUsersResponse.class))
+                .toList();
     }
 }
