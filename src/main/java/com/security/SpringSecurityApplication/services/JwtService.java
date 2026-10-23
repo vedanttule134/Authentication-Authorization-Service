@@ -30,9 +30,9 @@ public class JwtService {
         this.userRepo = userRepo;
     }
 
-    public String generateToken(LoginRequest request) {
+    public String generateAccessToken(String username) {
 
-        Users user = userRepo.findByUsername(request.getUsername())
+        Users user = userRepo.findByUsername(username)
                 .orElseThrow(() -> new BadCredentialsException("Username does not exist!"));
 
         return Jwts.builder()
@@ -40,7 +40,21 @@ public class JwtService {
                 .claim("email", user.getEmail())
                 .claim("username", user.getUsername())
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 1000*60*5))
+                .expiration(new Date(System.currentTimeMillis() + 1000*60))
+                .signWith(getSecretKey())
+                .compact();
+
+    }
+
+    public String generateRefreshToken(String username) {
+
+        Users user = userRepo.findByUsername(username)
+                .orElseThrow(() -> new BadCredentialsException("Username does not exist!"));
+
+        return Jwts.builder()
+                .subject(user.getId().toString())
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + 1000L*60*60*24*30*6))
                 .signWith(getSecretKey())
                 .compact();
 

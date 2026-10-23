@@ -1,4 +1,4 @@
-package com.security.SpringSecurityApplication;
+package com.security.SpringSecurityApplication.filters;
 
 import com.security.SpringSecurityApplication.entities.Users;
 import com.security.SpringSecurityApplication.repositories.UserRepository;
@@ -14,7 +14,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
