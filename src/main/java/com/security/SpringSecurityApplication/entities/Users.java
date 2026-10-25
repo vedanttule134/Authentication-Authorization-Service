@@ -2,6 +2,7 @@ package com.security.SpringSecurityApplication.entities;
 
 import com.security.SpringSecurityApplication.enums.Permission;
 import com.security.SpringSecurityApplication.enums.Role;
+import com.security.SpringSecurityApplication.utils.permissionMappings;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -40,10 +42,6 @@ public class Users implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Enumerated
-    private Set<Permission> permissions;
-
     private boolean enabled = true;
 
     @CreationTimestamp
@@ -54,14 +52,18 @@ public class Users implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<SimpleGrantedAuthority> authorities = roles.stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_"+role.name()))
-                .collect(Collectors.toSet());
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+        roles.forEach(role -> {
+            // Add role authority
+            authorities.add(
+                    new SimpleGrantedAuthority("ROLE_" + role.name())
+            );
 
-        permissions.forEach(
-                permission -> authorities.add(new SimpleGrantedAuthority(permission.name()))
-        );
-
+            // Add permissions associated with role
+            authorities.addAll(
+                    permissionMappings.getAuthoritiesForRole(role)
+            );
+        });
         return authorities;
     }
 }
