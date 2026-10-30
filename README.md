@@ -1,15 +1,6 @@
 # Spring Security Authentication & Authorization API
 
-A Java backend project exploring authentication and access control with Spring Boot, Spring Security, JWT, and MySQL. The application supports user registration, username/password login, JWT-based request authentication, database-backed refresh-token sessions, and role-based access to user and employee APIs.
-
-The repository is intended as a practical learning and portfolio project. It demonstrates the core security flow while documenting the work still required before production use.
-
-![Java](https://img.shields.io/badge/Java-21-orange?logo=openjdk)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.x-6DB33F?logo=springboot)
-![Spring Security](https://img.shields.io/badge/Spring%20Security-7.x-6DB33F?logo=springsecurity)
-![MySQL](https://img.shields.io/badge/MySQL-8.x-4479A1?logo=mysql&logoColor=white)
-![JWT](https://img.shields.io/badge/Authentication-JWT-black?logo=jsonwebtokens)
-![Maven](https://img.shields.io/badge/Build-Maven-C71A36?logo=apachemaven)
+A Java backend project exploring authentication and access control with Spring Boot, Spring Security, JWT, and MySQL. The application supports user registration, username/password login, JWT-based request authentication, database-backed refresh-token sessions, and role-based access to user and employee APIs. The repository is intended as a practical learning and portfolio project. It demonstrates the core security flow while documenting the work still required before production use.
 
 ## What the application currently does
 
@@ -216,36 +207,3 @@ sequenceDiagram
 ```
 
 For protected requests, `JwtAuthFilter` reads the bearer token, verifies its signature and expiry through `JwtService`, loads the user, checks that the account is enabled, and places the user's authorities in the security context. The configured URL authorization rules then decide whether the request is allowed.
-
-## Current scope and known limitations
-
-This is an evolving project, not a production-ready identity provider. The following items should be addressed before using it to protect real applications:
-
-- Refresh-token rotation and reuse detection are not implemented; the current refresh flow reuses the submitted refresh token.
-- Refresh-token storage currently uses the raw token. Store a one-way hash instead.
-- The refresh cookie currently sets `HttpOnly`, but should also be configured with appropriate `Secure`, `SameSite`, `Path`, and expiry attributes. Review CSRF protections when using cookie-based refresh tokens.
-- Public registration currently accepts a roles field. Restrict public registration to a default low-privilege role and reserve role assignment for authorized administrators.
-- `CustomUserDetailsService` currently assigns the `USER` role rather than loading the user's persisted roles. Align it with the database-backed role and permission model.
-- The session validation path should handle unknown, expired, and revoked sessions safely; session expiry and cleanup are not yet implemented.
-- Access and refresh tokens currently use the same signing key and do not have an explicit token-purpose claim. Separate token purposes and validate issuer/audience as appropriate.
-- Automated authentication/authorization tests, centralized API error responses, schema migrations, API documentation, containerization, and CI checks remain to be added.
-
-## Development roadmap
-
-- [ ] Correctly load persisted roles and authorities during authentication.
-- [ ] Prevent privilege escalation through public registration.
-- [ ] Implement refresh-token rotation, reuse detection, hashed storage, and expiry.
-- [ ] Add session listing, individual-session revocation, and logout from all devices.
-- [ ] Add password reset, email verification, and login rate limiting/account lockout.
-- [ ] Add method-level permission checks and database-managed roles/permissions.
-- [ ] Add validation and consistent `400`, `401`, `403`, and `404` error responses.
-- [ ] Add unit and integration tests with JUnit 5, Mockito, MockMvc, and Testcontainers.
-- [ ] Add Flyway migrations, OpenAPI documentation, Docker Compose, and GitHub Actions.
-
-## Contributing
-
-Issues and pull requests are welcome. For substantial changes, please open an issue describing the proposed behavior before submitting a pull request.
-
-## License
-
-No license is currently specified. Add a `LICENSE` file before inviting others to reuse or distribute this project.
